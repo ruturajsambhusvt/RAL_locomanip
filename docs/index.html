@@ -104,7 +104,7 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/vendor/katex/katex.min.css">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=2">
 </head>
 <body>
 
@@ -193,11 +193,21 @@
 <section id="video" class="band">
   <div class="wrap">
     <h2>Video</h2>
-    <button class="yt" type="button" data-yt="2zjDdqY5aF8" aria-label="Play the supplementary video">
+    <button class="yt" type="button" data-yt="2zjDdqY5aF8" data-title="Supplementary video" aria-label="Play the supplementary video">
       <img src="assets/img/video-poster.jpg" width="1280" height="720" alt="" loading="lazy">
       <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
     </button>
     <p class="note">Supplementary video, 7 min 25 s. <a href="https://youtu.be/2zjDdqY5aF8">Watch on YouTube</a>.</p>
+    <div class="talk">
+      <button class="yt" type="button" data-yt="OfSgraEWjyg" data-title="IROS 2026 talk" aria-label="Play the IROS 2026 talk">
+        <img src="assets/img/talk-poster.jpg" width="1120" height="630" alt="" loading="lazy">
+        <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+      </button>
+      <div>
+        <h3>Talk at IROS 2026</h3>
+        <p class="note">Conference presentation in Pittsburgh, recorded from the audience, 9 min 25 s. <a href="https://youtu.be/OfSgraEWjyg">Watch on YouTube</a>.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -420,12 +430,12 @@ cd build && mkdir -p tmp
   <div class="wrap">
     <img src="assets/img/arcol.webp" width="480" alt="ARCOL Lab: Agile Robots for Control, Optimization, and Learning" loading="lazy">
     <img class="vt" src="assets/img/vt.png" width="751" height="142" alt="Virginia Tech" loading="lazy">
-    <p>Figures and video are from the paper. © 2026 IEEE for the published article.</p>
+    <p>Figures and experiment videos are from the paper. © 2026 IEEE for the published article.</p>
   </div>
 </footer>
 
 <script defer src="assets/vendor/katex/katex.min.js"></script>
 <script defer src="assets/vendor/katex/auto-render.min.js"></script>
-<script defer src="assets/main.js"></script>
+<script defer src="assets/main.js?v=2"></script>
 </body>
 </html>

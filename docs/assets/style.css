@@ -99,6 +99,11 @@ details p { max-width: none; color: var(--ink2); margin-top: .5rem; }
 .yt-play { position: absolute; inset: 0; display: grid; place-items: center; }
 .yt-play svg { width: 84px; height: 84px; padding: 18px; border-radius: 50%; background: var(--maroon); fill: #fff; box-shadow: 0 4px 24px rgb(0 0 0 / .35); transition: background .15s; }
 .yt:hover .yt-play svg { background: #6b1733; }
+.talk { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.75rem; align-items: center; margin-top: 2.5rem; }
+.talk h3 { margin: 0; }
+.talk .note { margin: .5rem 0 0; }
+.talk .yt-play svg { width: 64px; height: 64px; padding: 14px; }
+@media (max-width: 720px) { .talk { grid-template-columns: minmax(0, 1fr); gap: 1rem; } }
 
 /* experiment wall: door-height tasks at both ends, as in Fig. 3 */
 .wall { display: grid; grid-template-columns: .92fr 1.25fr 1.25fr .92fr; grid-template-rows: auto auto; gap: 1.5rem 1.1rem; }

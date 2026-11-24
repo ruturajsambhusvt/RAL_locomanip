@@ -11,7 +11,8 @@ Source of the project page for
 [Paper](https://doi.org/10.1109/LRA.2026.3664229) ·
 [Accepted PDF](https://hdl.handle.net/10919/141324) ·
 [arXiv](https://arxiv.org/abs/2507.22042) ·
-[Video](https://youtu.be/2zjDdqY5aF8)
+[Video](https://youtu.be/2zjDdqY5aF8) ·
+[IROS 2026 talk](https://youtu.be/OfSgraEWjyg)
 
 The NMPC couples a single-rigid-body locomotion template with the full-order dynamics of a 4-DoF Kinova arm through rigid holonomic constraints. It solves for base motion, ground reaction forces, arm torques and the interaction wrench at 60 Hz. A QP-based whole-body controller tracks the locomotion plan at 500 Hz.
 

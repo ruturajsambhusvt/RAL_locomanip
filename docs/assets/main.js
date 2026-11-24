@@ -30,7 +30,7 @@
       box.className = "yt";
       var f = document.createElement("iframe");
       f.src = "https://www.youtube-nocookie.com/embed/" + btn.dataset.yt + "?autoplay=1&rel=0";
-      f.title = "Supplementary video";
+      f.title = btn.dataset.title || "Video";
       f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
       f.referrerPolicy = "strict-origin-when-cross-origin";
       f.allowFullscreen = true;
