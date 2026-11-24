@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nonlinear MPC for Quadrupedal Loco-Manipulation</title>
-<meta name="description" content="A nonlinear MPC framework that couples a locomotion template with full-order arm dynamics. Hardware results on a 15 kg Go2 carrying a 4.4 kg Kinova arm. IEEE RA-L 2026.">
+<title>A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics</title>
+<meta name="description" content="Project page with paper, video and code for “A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics” (Sambhus, Mehta, Sadeghi et al., IEEE RA-L 2026).">
 <link rel="canonical" href="https://ruturajsambhusvt.github.io/RAL_locomanip/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics">
@@ -31,6 +31,75 @@
 <meta name="citation_firstpage" content="4050">
 <meta name="citation_lastpage" content="4057">
 <meta name="citation_doi" content="10.1109/LRA.2026.3664229">
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "ScholarlyArticle",
+ "headline": "A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics",
+ "name": "A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics",
+ "author": [
+  {
+   "@type": "Person",
+   "name": "Ruturaj S. Sambhus"
+  },
+  {
+   "@type": "Person",
+   "name": "Kapi Ketan Mehta"
+  },
+  {
+   "@type": "Person",
+   "name": "Ali MirMohammad Sadeghi"
+  },
+  {
+   "@type": "Person",
+   "name": "Basit Muhammad Imran"
+  },
+  {
+   "@type": "Person",
+   "name": "Jeeseop Kim"
+  },
+  {
+   "@type": "Person",
+   "name": "Taizoon Chunawala"
+  },
+  {
+   "@type": "Person",
+   "name": "Vittorio Pastore"
+  },
+  {
+   "@type": "Person",
+   "name": "Sujith Vijayan"
+  },
+  {
+   "@type": "Person",
+   "name": "Kaveh Akbari Hamed"
+  }
+ ],
+ "datePublished": "2026",
+ "isPartOf": {
+  "@type": "PublicationIssue",
+  "issueNumber": "4",
+  "isPartOf": {
+   "@type": "PublicationVolume",
+   "volumeNumber": "11",
+   "isPartOf": {
+    "@type": "Periodical",
+    "name": "IEEE Robotics and Automation Letters"
+   }
+  }
+ },
+ "pageStart": "4050",
+ "pageEnd": "4057",
+ "url": "https://ruturajsambhusvt.github.io/RAL_locomanip/",
+ "image": "https://ruturajsambhusvt.github.io/RAL_locomanip/assets/img/og.jpg",
+ "sameAs": [
+  "https://doi.org/10.1109/LRA.2026.3664229",
+  "https://arxiv.org/abs/2507.22042",
+  "https://hdl.handle.net/10919/141324"
+ ]
+}
+</script>
 
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/archivo-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -82,7 +151,7 @@
       <a class="btn" href="https://hdl.handle.net/10919/141324">Accepted PDF</a>
       <a class="btn" href="https://arxiv.org/abs/2507.22042">arXiv</a>
       <a class="btn" href="#video">Video</a>
-      <a class="btn" data-repo href="https://github.com/ruturajsambhusvt/RAL_locomanip">Code <span data-code-tag class="tag">coming soon</span></a>
+      <a class="btn" href="https://github.com/HDSRL/Locomanipulation_NMPC_Go2_Kinova">Code</a>
     </div>
   </div>
 
@@ -301,16 +370,22 @@
 <section id="code" class="band">
   <div class="wrap">
     <h2>Code</h2>
-    <div data-code="soon">
-      <p>We are preparing the controller for release. It will appear in this repository. Watch the repository on GitHub to hear when it does.</p>
-      <p><a class="btn primary" data-repo href="https://github.com/ruturajsambhusvt/RAL_locomanip">Open the repository</a></p>
-    </div>
-    <div data-code="released" hidden>
-      <p>The controller is open source. Build steps and examples are in the repository README.</p>
-      <pre><code data-clone>git clone https://github.com/ruturajsambhusvt/RAL_locomanip.git</code></pre>
-      <p><a class="btn primary" data-repo href="https://github.com/ruturajsambhusvt/RAL_locomanip">Open the repository</a></p>
-    </div>
-    <p class="note">The NMPC is written with <a href="https://web.casadi.org/">CasADi</a> and solved with <a href="https://coin-or.github.io/Ipopt/">IPOPT</a>. Simulations use <a href="https://raisim.com/">RaiSim</a>, which needs its own license.</p>
+    <p>The C++ controller is open source under GPL-3.0. The repository has the NMPC and its CasADi code generation, the whole-body QP, RaiSim simulations of the Go2 and A1 with the Kinova arm, and the Go2 hardware program. It also includes the CAD for the arm mount.</p>
+    <p><a class="btn primary" href="https://github.com/HDSRL/Locomanipulation_NMPC_Go2_Kinova">Open the repository</a></p>
+    <h3>Build</h3>
+<pre><code>git clone https://github.com/HDSRL/Locomanipulation_NMPC_Go2_Kinova.git
+cd Locomanipulation_NMPC_Go2_Kinova
+
+# gamepad library, once
+cmake -S JoyShockLibrary -B JoyShockLibrary/build -DCMAKE_BUILD_TYPE=Release
+cmake --build JoyShockLibrary/build -j
+
+bash runCodegenA1K.sh   # generate the NMPC solver
+bash cmakemake.sh       # build everything
+
+cd build && mkdir -p tmp
+./A1_Kinova_Sim_Debug ../params/LL_w_CLF.txt ../params/Walking_params.txt ../params/A1_Kinova_NMPC_params.txt</code></pre>
+    <p class="note">Set the RaiSim paths first, as described in the <a href="https://github.com/HDSRL/Locomanipulation_NMPC_Go2_Kinova#setup">README</a>. Tested on Ubuntu 22.04 with GCC 11.4, CasADi 3.6.7, IPOPT 3.14.17 and RaiSim 1.1.7. <a href="https://raisim.com/">RaiSim</a> needs a license, and IPOPT uses the <a href="https://licences.stfc.ac.uk/product/coin-hsl">HSL MA57</a> solver, which is free for academic use.</p>
   </div>
 </section>
 
@@ -319,7 +394,7 @@
   <h2>Cite</h2>
   <div class="bib">
     <button class="btn copy" type="button" data-copy="#bibtex">Copy BibTeX</button>
-    <pre id="bibtex"><code>@article{sambhus2026locomanipulation,
+    <pre id="bibtex"><code>@article{sambhus2026nmpc,
   author  = {Sambhus, Ruturaj S. and Mehta, Kapi Ketan and
              Sadeghi, Ali MirMohammad and Imran, Basit Muhammad and
              Kim, Jeeseop and Chunawala, Taizoon and
@@ -349,7 +424,6 @@
   </div>
 </footer>
 
-<script src="site.config.js"></script>
 <script defer src="assets/vendor/katex/katex.min.js"></script>
 <script defer src="assets/vendor/katex/auto-render.min.js"></script>
 <script defer src="assets/main.js"></script>

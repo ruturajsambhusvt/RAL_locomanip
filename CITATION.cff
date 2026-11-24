@@ -22,3 +22,5 @@ preferred-citation:
   end: 4057
   year: 2026
   doi: 10.1109/LRA.2026.3664229
+repository-code: "https://github.com/HDSRL/Locomanipulation_NMPC_Go2_Kinova"
+url: "https://ruturajsambhusvt.github.io/RAL_locomanip/"

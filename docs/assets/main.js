@@ -1,19 +1,5 @@
 (function () {
   "use strict";
-  var site = window.SITE || {};
-
-  /* ---- repository links and release state (docs/site.config.js) ---- */
-  if (site.repoUrl) {
-    document.querySelectorAll("[data-repo]").forEach(function (a) { a.href = site.repoUrl; });
-    var clone = document.querySelector("[data-clone]");
-    if (clone) clone.textContent = "git clone " + site.repoUrl + ".git";
-  }
-  if (site.codeReleased) {
-    document.querySelectorAll("[data-code-tag]").forEach(function (t) { t.hidden = true; });
-    document.querySelector('[data-code="soon"]').hidden = true;
-    document.querySelector('[data-code="released"]').hidden = false;
-  }
-
   /* ---- equations ---- */
   if (window.renderMathInElement) {
     window.renderMathInElement(document.querySelector("#method"), {
