@@ -1,0 +1,11 @@
+build/
+*.o
+*.so
+*.log
+__pycache__/
+.vscode/
+.DS_Store
+Thumbs.db
+# RaiSim license files must never be committed
+activation.raisim
+*.raisim

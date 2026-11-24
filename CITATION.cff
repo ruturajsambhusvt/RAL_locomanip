@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper below."
+title: "A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics"
+authors: &authors
+  - {family-names: Sambhus, given-names: Ruturaj S.}
+  - {family-names: Mehta, given-names: Kapi Ketan}
+  - {family-names: Sadeghi, given-names: Ali MirMohammad}
+  - {family-names: Imran, given-names: Basit Muhammad}
+  - {family-names: Kim, given-names: Jeeseop}
+  - {family-names: Chunawala, given-names: Taizoon}
+  - {family-names: Pastore, given-names: Vittorio}
+  - {family-names: Vijayan, given-names: Sujith}
+  - {family-names: Akbari Hamed, given-names: Kaveh}
+preferred-citation:
+  type: article
+  title: "A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics"
+  authors: *authors
+  journal: "IEEE Robotics and Automation Letters"
+  volume: 11
+  issue: 4
+  start: 4050
+  end: 4057
+  year: 2026
+  doi: 10.1109/LRA.2026.3664229

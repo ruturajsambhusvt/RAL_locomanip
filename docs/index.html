@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nonlinear MPC for Quadrupedal Loco-Manipulation</title>
+<meta name="description" content="A nonlinear MPC framework that couples a locomotion template with full-order arm dynamics. Hardware results on a 15 kg Go2 carrying a 4.4 kg Kinova arm. IEEE RA-L 2026.">
+<link rel="canonical" href="https://ruturajsambhusvt.github.io/RAL_locomanip/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics">
+<meta property="og:description" content="IEEE Robotics and Automation Letters, 2026. Paper, video and code.">
+<meta property="og:url" content="https://ruturajsambhusvt.github.io/RAL_locomanip/">
+<meta property="og:image" content="https://ruturajsambhusvt.github.io/RAL_locomanip/assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Google Scholar -->
+<meta name="citation_title" content="A Nonlinear MPC Framework for Loco-Manipulation of Quadrupedal Robots With Non-Negligible Manipulator Dynamics">
+<meta name="citation_author" content="Sambhus, Ruturaj S.">
+<meta name="citation_author" content="Mehta, Kapi Ketan">
+<meta name="citation_author" content="Sadeghi, Ali MirMohammad">
+<meta name="citation_author" content="Imran, Basit Muhammad">
+<meta name="citation_author" content="Kim, Jeeseop">
+<meta name="citation_author" content="Chunawala, Taizoon">
+<meta name="citation_author" content="Pastore, Vittorio">
+<meta name="citation_author" content="Vijayan, Sujith">
+<meta name="citation_author" content="Akbari Hamed, Kaveh">
+<meta name="citation_publication_date" content="2026">
+<meta name="citation_journal_title" content="IEEE Robotics and Automation Letters">
+<meta name="citation_volume" content="11">
+<meta name="citation_issue" content="4">
+<meta name="citation_firstpage" content="4050">
+<meta name="citation_lastpage" content="4057">
+<meta name="citation_doi" content="10.1109/LRA.2026.3664229">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/archivo-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/vendor/katex/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="bar" aria-label="Page sections">
+  <div class="wrap">
+    <a class="bar-home" href="#top">Loco-Manipulation NMPC</a>
+    <ul>
+      <li><a href="#video">Video</a></li>
+      <li><a href="#experiments">Experiments</a></li>
+      <li><a href="#method">Method</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#code">Code</a></li>
+      <li><a href="#cite">Cite</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top">
+
+<!-- ───────────── Header ───────────── -->
+<header class="hero wrap">
+  <div class="hero-text">
+    <p class="venue">IEEE Robotics and Automation Letters, vol. 11, no. 4, 2026</p>
+    <h1>A Nonlinear MPC Framework for <span class="nb">Loco-Manipulation</span> of Quadrupedal Robots With Non-Negligible Manipulator Dynamics</h1>
+    <p class="authors">
+      <span>Ruturaj S. Sambhus<sup>1*</sup></span>
+      <span>Kapi Ketan Mehta<sup>1*</sup></span>
+      <span>Ali MirMohammad Sadeghi<sup>1*</sup></span>
+      <span>Basit Muhammad Imran<sup>1</sup></span>
+      <span>Jeeseop Kim<sup>2</sup></span>
+      <span>Taizoon Chunawala<sup>1</sup></span>
+      <span>Vittorio Pastore<sup>1</sup></span>
+      <span>Sujith Vijayan<sup>3</sup></span>
+      <span>Kaveh Akbari Hamed<sup>1</sup></span>
+    </p>
+    <p class="affil">
+      <sup>1</sup> Mechanical Engineering, Virginia Tech<br>
+      <sup>2</sup> The University of Texas at El Paso<br>
+      <sup>3</sup> School of Neuroscience, Virginia Tech<br>
+      <sup>*</sup> Equal contribution
+    </p>
+    <div class="links">
+      <a class="btn primary" href="https://doi.org/10.1109/LRA.2026.3664229">Paper (IEEE)</a>
+      <a class="btn" href="https://hdl.handle.net/10919/141324">Accepted PDF</a>
+      <a class="btn" href="https://arxiv.org/abs/2507.22042">arXiv</a>
+      <a class="btn" href="#video">Video</a>
+      <a class="btn" data-repo href="https://github.com/ruturajsambhusvt/RAL_locomanip">Code <span data-code-tag class="tag">coming soon</span></a>
+    </div>
+  </div>
+
+  <figure class="hero-fig">
+    <div class="hero-img">
+      <img src="assets/img/hero.jpg" width="1100" height="1464" alt="The Go2 quadruped with a Kinova arm on its back pulls open a refrigerator door that stands well above the robot.">
+      <svg viewBox="0 0 1000 1331" aria-hidden="true">
+        <g class="lead"><path d="M120 252 L258 372"/><circle cx="262" cy="376" r="7"/></g>
+        <text x="46" y="180"><tspan class="t1">Kinova arm</tspan><tspan class="t2" x="46" dy="42">4.4 kg, torque-controlled</tspan></text>
+        <g class="lead int"><path d="M428 640 L344 856"/><circle class="ring" cx="333" cy="884" r="30"/></g>
+        <text class="int" x="388" y="572"><tspan class="t1">Interaction</tspan><tspan class="t1" x="388" dy="42">wrench λ</tspan><tspan class="sup" dy="-16">int</tspan></text>
+        <g class="lead"><path d="M470 846 L430 962"/><circle cx="427" cy="968" r="7"/></g>
+        <text x="432" y="784"><tspan class="t1">Go2 base</tspan><tspan class="t2" x="432" dy="42">15 kg</tspan></text>
+      </svg>
+    </div>
+  </figure>
+</header>
+
+<!-- ───────────── Summary ───────────── -->
+<section class="wrap summary" aria-label="Summary">
+  <p class="lede">A 4.4 kg arm on a 15 kg quadruped is too heavy to treat as a disturbance. We keep a compact single-rigid-body template for locomotion, keep the full-order dynamics of the arm, and couple the two through rigid holonomic constraints. One nonlinear MPC solves for the base motion, the arm torques and the wrench between them at 60&nbsp;Hz.</p>
+  <details>
+    <summary>Read the abstract</summary>
+    <p>Model predictive control (MPC) with reduced-order template models has proven effective for dynamic legged locomotion, but loco-manipulation introduces additional complexity requiring efficient algorithms for high-degree-of-freedom (DoF) systems. This letter presents a computationally efficient nonlinear MPC (NMPC) framework tailored for loco-manipulation tasks of quadrupedal robots equipped with robotic manipulators whose dynamics are non-negligible relative to those of the quadruped. The proposed framework adopts a decomposition strategy that couples locomotion template models—such as the single rigid body model—with a full-order dynamic model of the robotic manipulator for torque-level control. This decomposition enables efficient real-time solution of the NMPC problem in a receding horizon fashion. The optimal state and input trajectories generated by the NMPC for locomotion are tracked by a low-level nonlinear whole-body controller, while the optimal torque commands for the manipulator are directly applied. The layered control architecture is validated through extensive numerical simulations and hardware experiments on a 15-kg Go2 quadrupedal robot augmented with a 4.4-kg 4-DoF Kinova arm. Given that the Kinova arm dynamics are non-negligible relative to the Go2 base, the proposed NMPC framework demonstrates robust stability in performing diverse loco-manipulation tasks, effectively handling external disturbances, payload variations, and uneven terrain.</p>
+  </details>
+
+  <figure class="mass">
+    <figcaption>Mass, drawn to scale. None of the loads is modeled in the controller.</figcaption>
+    <dl>
+      <div class="row"><dt>Robot</dt><dd><span class="seg base" style="--kg:15">Go2 15 kg</span><span class="seg arm" style="--kg:4.4">Arm 4.4</span><b>19.4 kg</b></dd></div>
+      <div class="row"><dt>Cart it pushes</dt><dd><span class="seg load" style="--kg:13">Cart 13 kg</span><span class="seg load2" style="--kg:11.4">Payload 11.4 kg</span><b>24.4 kg</b></dd></div>
+      <div class="row"><dt>Suitcase it pulls</dt><dd><span class="seg load" style="--kg:3.7"></span><b>3.7 kg</b></dd></div>
+      <div class="row"><dt>Payload in gripper</dt><dd><span class="seg load" style="--kg:1"></span><b>1 kg</b></dd></div>
+    </dl>
+  </figure>
+</section>
+
+<!-- ───────────── Video ───────────── -->
+<section id="video" class="band">
+  <div class="wrap">
+    <h2>Video</h2>
+    <button class="yt" type="button" data-yt="SaZMqanFWv0" aria-label="Play the supplementary video">
+      <img src="assets/img/video-poster.jpg" width="1280" height="720" alt="" loading="lazy">
+      <span class="yt-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+    </button>
+    <p class="note">Supplementary video, 7 min 25 s. <a href="https://youtu.be/SaZMqanFWv0">Watch on YouTube</a>.</p>
+  </div>
+</section>
+
+<!-- ───────────── Experiments ───────────── -->
+<section id="experiments" class="wrap">
+  <h2>Hardware experiments</h2>
+  <p class="sub">The operator sends velocity commands to the base and arm with a joystick. The controller has no terrain perception and no model of the objects it handles. Clips play at real speed unless marked.</p>
+
+  <div class="wall">
+    <figure class="tall">
+      <video muted loop playsinline preload="none" poster="assets/video/fridge.jpg" width="440" height="692" src="assets/video/fridge.mp4"></video>
+      <figcaption><b>Refrigerator</b> Opens the door and takes out a bottle. <i>5× speed, cut</i></figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/terrain.jpg" width="816" height="458" src="assets/video/terrain.mp4"></video>
+      <figcaption><b>Wooden blocks</b> Trots over unmodeled 5 cm blocks with a 1 kg payload.</figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/drawer.jpg" width="840" height="472" src="assets/video/drawer.mp4"></video>
+      <figcaption><b>Drawer</b> Opens it, takes out a penholder cup, closes it and sets the cup on a table. <i>5× speed</i></figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/pick.jpg" width="702" height="394" src="assets/video/pick.mp4"></video>
+      <figcaption><b>Pick and place</b> Picks up a Rubik’s cube and places it. <i>3× speed</i></figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/autonomy.jpg" width="880" height="492" src="assets/video/autonomy.mp4"></video>
+      <figcaption><b>Perception in the loop</b> RealSense and an ArUco marker set the arm reference.</figcaption>
+    </figure>
+    <figure class="tall">
+      <video muted loop playsinline preload="none" poster="assets/video/door.jpg" width="440" height="692" src="assets/video/door.mp4"></video>
+      <figcaption><b>Lab door</b> Opens a door without a spring and walks through. <i>2× speed</i></figcaption>
+    </figure>
+  </div>
+
+  <div class="strips">
+    <figure class="full">
+      <video muted loop playsinline preload="none" poster="assets/video/cart.jpg" width="1056" height="234" src="assets/video/cart.mp4"></video>
+      <figcaption><b>Loaded cart</b> Pushes a 13 kg cart while a person adds 11.4 kg, about 125% of the 19.4 kg robot in total.</figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/push.jpg" width="932" height="326" src="assets/video/push.mp4"></video>
+      <figcaption><b>External pushes</b> Trots in place with a 1 kg payload while being pushed.</figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/suitcase.jpg" width="720" height="240" src="assets/video/suitcase.mp4"></video>
+      <figcaption><b>Suitcase</b> Pulls a 3.7 kg carry-on.</figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/grass.jpg" width="606" height="212" src="assets/video/grass.mp4"></video>
+      <figcaption><b>Grass</b> Walks outdoors with the arm raised.</figcaption>
+    </figure>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/gravel.jpg" width="698" height="244" src="assets/video/gravel.mp4"></video>
+      <figcaption><b>Gravel</b> Walks on loose gravel.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ───────────── Method ───────────── -->
+<section id="method" class="band">
+  <div class="wrap">
+    <h2>Method</h2>
+    <p class="sub">Two subsystems keep their own dynamics. The constraint that bolts the arm to the trunk is the only place they meet, and the interaction wrench λ<sup>int</sup> is a decision variable of the MPC.</p>
+
+    <div class="scroll"><img class="fig overview" src="assets/img/overview.jpg" width="2400" height="482" alt="Layered control architecture. The NMPC runs at 60 Hz and sends joint torques to the arm and locomotion trajectories to a whole-body controller, which runs at 500 Hz and sends joint torques to the quadruped." loading="lazy"></div>
+
+    <div class="models">
+      <article>
+        <h3>Locomotion template</h3>
+        <p>Single rigid body, 12 states. Ground reaction forces are the inputs.</p>
+        $$\begin{aligned}\ddot p &= \tfrac{1}{m}f^{\mathrm{net}}-g_0\\ \dot\theta &= A(\theta)\,\omega\\ \dot\omega &= I^{-1}\!\left(\tau^{\mathrm{net}}-\mathbb S(\omega)I\omega\right)\end{aligned}$$
+      </article>
+      <article class="couple">
+        <h3>Rigid coupling</h3>
+        <p>Holonomic constraint φ = 0, enforced at the acceleration level.</p>
+        $$\begin{aligned} p+R(\theta)\,d&=p^{b}\\ \theta&=\theta^{b}\end{aligned}$$
+        $$\ddot\varphi\left(x^{\mathrm{SRB}},x^{\mathrm{arm}},u^{\mathrm{SRB}},u^{\mathrm{arm}},\lambda^{\mathrm{int}}\right)=0$$
+      </article>
+      <article>
+        <h3>Full-order arm</h3>
+        <p>Floating base, 20 states. Four joint torques are the inputs.</p>
+        $$D(q)\,\ddot q+H(q,\dot q)=B\,u^{\mathrm{arm}}-J^{\top}(q)\,\lambda^{\mathrm{int}}$$
+      </article>
+    </div>
+
+    <h3>Unified NMPC</h3>
+    <div class="scroll eq">
+      $$\begin{aligned}\min_{\xi^{\mathrm{SRB}},\,\xi^{\mathrm{arm}},\,\lambda^{\mathrm{int}}}\quad & J^{\mathrm{SRB}}(\xi^{\mathrm{SRB}})+J^{\mathrm{arm}}(\xi^{\mathrm{arm}})+J^{\mathrm{int}}(\lambda^{\mathrm{int}})\\ \text{s.t.}\quad & x^{\mathrm{SRB}}_{k+1}=f^{\mathrm{SRB}}\!\left(x^{\mathrm{SRB}}_{k},u^{\mathrm{SRB}}_{k},\lambda^{\mathrm{int}}_{k}\right)\\ & x^{\mathrm{arm}}_{k+1}=f^{\mathrm{arm}}\!\left(x^{\mathrm{arm}}_{k},u^{\mathrm{arm}}_{k},\lambda^{\mathrm{int}}_{k}\right)\\ & \ddot\varphi\left(x^{\mathrm{SRB}}_{k},x^{\mathrm{arm}}_{k},u^{\mathrm{SRB}}_{k},u^{\mathrm{arm}}_{k},\lambda^{\mathrm{int}}_{k}\right)=0\\ & E\,u^{\mathrm{SRB}}_{k}=0,\quad u^{\mathrm{SRB}}_{k}\in\mathcal U^{\mathrm{SRB}},\quad u^{\mathrm{arm}}_{k}\in\mathcal U^{\mathrm{arm}},\qquad k=0,\dots,N-1\end{aligned}$$
+    </div>
+
+    <dl class="specs">
+      <div><dt>NMPC rate</dt><dd>60 Hz</dd></div>
+      <div><dt>Horizon</dt><dd>N = 8, T<sub>s</sub> = 16.67 ms</dd></div>
+      <div><dt>Decision variables</dt><dd>464</dd></div>
+      <div><dt>Solver</dt><dd>CasADi + IPOPT, at most 10 iterations, warm-started</dd></div>
+      <div><dt>Mean solve time</dt><dd>12.7 ms on rough terrain, 13.6 ms under pushes</dd></div>
+      <div><dt>Whole-body controller</dt><dd>QP with virtual constraints, 500&nbsp;Hz</dd></div>
+      <div><dt>Computer</dt><dd>Offboard Intel Core i9-12900F, 64 GB RAM</dd></div>
+      <div><dt>Gait</dt><dd>Trot, 200 ms step</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ───────────── Results ───────────── -->
+<section id="results" class="wrap">
+  <h2>Results</h2>
+
+  <h3>Robustness on 200 random terrains</h3>
+  <p class="sub">Go2 with the Kinova arm in RaiSim at 0.5 m/s. Each terrain has 20 irregular blocks, 1–3&nbsp;cm high. A run succeeds if the robot covers 10 m with roll and pitch within ±1 rad and base height of at least 0.08 m.</p>
+
+  <div class="chart" id="chart" role="img" aria-label="Line chart of success rate against distance traveled for six controllers. Final values are in the table below."></div>
+
+  <div class="scroll">
+  <table class="data">
+    <thead><tr><th>Controller</th><th class="num">Rate</th><th class="num">Success at 10 m</th></tr></thead>
+    <tbody>
+      <tr><td><i class="key dec dash"></i>Decomposition, nonlinear arm inertia and Coriolis (ours)</td><td class="num">30 Hz</td><td class="num">90%</td></tr>
+      <tr><td><i class="key dec dot"></i>Decomposition, nonlinear arm inertia (ours)</td><td class="num">30 Hz</td><td class="num">88%</td></tr>
+      <tr class="em"><td><i class="key dec"></i>Decomposition, successively linearized inertia (ours, used on hardware)</td><td class="num">60 Hz</td><td class="num">86%</td></tr>
+      <tr><td><i class="key kino"></i>Kino-centroidal NMPC, arm inverse dynamics</td><td class="num">60 Hz</td><td class="num">69%</td></tr>
+      <tr><td><i class="key wb"></i>Whole-body NMPC, ProxDDP</td><td class="num">100 Hz</td><td class="num">35%</td></tr>
+      <tr><td><i class="key kino dash"></i>Kino-centroidal NMPC, arm PD</td><td class="num">60 Hz</td><td class="num">28%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">The kino-centroidal baselines leave out the coupling between joint torques and the floating-base arm dynamics. The whole-body baseline puts all states and torques in one optimization, which makes it more sensitive to disturbances.</p>
+  <p class="note">The full nonlinear arm inertia and Coriolis terms add a few points of success and roughly double the computation time, so the 60 Hz linearized variant runs on the robot.</p>
+
+  <h3>Base motion on hardware</h3>
+  <figure>
+    <img class="fig" src="assets/img/base-tracking.webp" alt="Reference and optimal base velocities with roll and pitch for three experiments: wooden blocks, loaded cart and external pushes." loading="lazy">
+    <figcaption>Commanded and NMPC-optimal base velocities with roll and pitch: (a) wooden blocks with a 1 kg payload, (b) cart with an 11.4 kg payload, (c) in-place trot under pushes.</figcaption>
+  </figure>
+
+  <h3>Arm motion</h3>
+  <figure>
+    <img class="fig" src="assets/img/arm-fridge.webp" alt="Reference and actual positions of three arm joints while opening the refrigerator, picking up a bottle and placing it." loading="lazy">
+    <figcaption>Reference and actual joint positions for three of the four Kinova joints during the refrigerator task, with base roll and pitch.</figcaption>
+  </figure>
+  <p>In simulation, four controllers tracked 0.1–0.2 Hz sinusoidal arm references while trotting. We found no significant difference in arm tracking between them.</p>
+  <div class="scroll">
+  <table class="data">
+    <thead><tr><th>RMS tracking error (rad)</th><th class="num">Joint 1</th><th class="num">Joint 2</th><th class="num">Joint 3</th></tr></thead>
+    <tbody>
+      <tr><td>Decomposition, nonlinear inertia and Coriolis (ours)</td><td class="num">0.0487</td><td class="num">0.1554</td><td class="num">0.0711</td></tr>
+      <tr><td>Decomposition, successively linearized inertia (ours)</td><td class="num">0.0168</td><td class="num">0.0946</td><td class="num">0.0225</td></tr>
+      <tr><td>Whole-body NMPC, ProxDDP</td><td class="num">0.0546</td><td class="num">0.0551</td><td class="num">0.1202</td></tr>
+      <tr><td>Kino-centroidal NMPC, arm inverse dynamics</td><td class="num">0.0091</td><td class="num">0.0090</td><td class="num">0.0172</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note">On hardware, the same sinusoids gave RMS errors of 0.1740, 0.2058 and 0.2246 rad, mainly from unmodeled joint friction.</p>
+
+  <div class="pair">
+    <div>
+      <h3>Communication latency</h3>
+      <p>We simulated two-way delays of 5–25 ms between arm feedback and torque commands. The closed loop stayed stable up to 15 ms. Mild arm oscillations appeared as the delay approached 25 ms.</p>
+      <h3>Another quadruped</h3>
+      <p>The same controller also runs in simulation on a 12.45 kg Unitree A1 with the same arm. We did not test it on hardware because the A1 has lower torque limits than the Go2.</p>
+    </div>
+    <figure>
+      <video muted loop playsinline preload="none" poster="assets/video/a1.jpg" width="840" height="454" src="assets/video/a1.mp4"></video>
+      <figcaption>Unitree A1 with the Kinova arm in RaiSim.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ───────────── Code ───────────── -->
+<section id="code" class="band">
+  <div class="wrap">
+    <h2>Code</h2>
+    <div data-code="soon">
+      <p>We are preparing the controller for release. It will appear in this repository. Watch the repository on GitHub to hear when it does.</p>
+      <p><a class="btn primary" data-repo href="https://github.com/ruturajsambhusvt/RAL_locomanip">Open the repository</a></p>
+    </div>
+    <div data-code="released" hidden>
+      <p>The controller is open source. Build steps and examples are in the repository README.</p>
+      <pre><code data-clone>git clone https://github.com/ruturajsambhusvt/RAL_locomanip.git</code></pre>
+      <p><a class="btn primary" data-repo href="https://github.com/ruturajsambhusvt/RAL_locomanip">Open the repository</a></p>
+    </div>
+    <p class="note">The NMPC is written with <a href="https://web.casadi.org/">CasADi</a> and solved with <a href="https://coin-or.github.io/Ipopt/">IPOPT</a>. Simulations use <a href="https://raisim.com/">RaiSim</a>, which needs its own license.</p>
+  </div>
+</section>
+
+<!-- ───────────── Cite ───────────── -->
+<section id="cite" class="wrap">
+  <h2>Cite</h2>
+  <div class="bib">
+    <button class="btn copy" type="button" data-copy="#bibtex">Copy BibTeX</button>
+    <pre id="bibtex"><code>@article{sambhus2026locomanipulation,
+  author  = {Sambhus, Ruturaj S. and Mehta, Kapi Ketan and
+             Sadeghi, Ali MirMohammad and Imran, Basit Muhammad and
+             Kim, Jeeseop and Chunawala, Taizoon and
+             Pastore, Vittorio and Vijayan, Sujith and
+             Akbari Hamed, Kaveh},
+  title   = {A Nonlinear {MPC} Framework for Loco-Manipulation of
+             Quadrupedal Robots With Non-Negligible Manipulator Dynamics},
+  journal = {IEEE Robotics and Automation Letters},
+  volume  = {11},
+  number  = {4},
+  pages   = {4050--4057},
+  year    = {2026},
+  doi     = {10.1109/LRA.2026.3664229}
+}</code></pre>
+  </div>
+  <h3>Acknowledgment</h3>
+  <p>The work of R. S. Sambhus, S. Vijayan and K. Akbari Hamed is partially supported by the National Science Foundation under Grant 2423725.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/img/arcol.webp" width="480" alt="ARCOL Lab: Agile Robots for Control, Optimization, and Learning" loading="lazy">
+    <img class="vt" src="assets/img/vt.png" width="751" height="142" alt="Virginia Tech" loading="lazy">
+    <p>Figures and video are from the paper. © 2026 IEEE for the published article.</p>
+  </div>
+</footer>
+
+<script src="site.config.js"></script>
+<script defer src="assets/vendor/katex/katex.min.js"></script>
+<script defer src="assets/vendor/katex/auto-render.min.js"></script>
+<script defer src="assets/main.js"></script>
+</body>
+</html>
